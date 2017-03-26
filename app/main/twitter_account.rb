@@ -23,6 +23,7 @@ class TwitterAccount
   end
 
   def reply_to(tweets)
+    Rails.logger.info 'Processing tweets'
     tweets.each do |tweet|
       next if Mention.exists?(status_id: tweet.id)
       coordinates = tweet&.geo&.coordinates
@@ -31,6 +32,7 @@ class TwitterAccount
       opts = reply_tweet_options(tweet, nearest)
       text = reply_tweet_text(tweet, nearest)
       update(text, opts)
+      Rails.logger.info "Tweeted reply to #{tweet.id}!"
       Mention.create(status_id: tweet.id)
     end
   end
