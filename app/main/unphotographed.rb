@@ -24,8 +24,6 @@ class Unphotographed
 
   def fetch_nearby
     response = Net::HTTP.get(URI.parse(query_url))
-    pp query_url
-    pp response
     JSON.parse(response)
   end
 
