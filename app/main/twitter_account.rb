@@ -24,11 +24,14 @@ class TwitterAccount
 
   def reply_to(tweets)
     tweets.each do |tweet|
+      next if Mention.exists?(status_id: tweet.id)
       coordinates = tweet&.geo&.coordinates
       next unless coordinates
       nearest = Unphotographed.near(coordinates)
-      pp reply_tweet_options(tweet, nearest)
-      pp reply_tweet_text(tweet, nearest)
+      opts = reply_tweet_options(tweet, nearest)
+      text = reply_tweet_text(tweet, nearest)
+      update(text, opts)
+      Mention.create(status_id: tweet.id)
     end
   end
 
