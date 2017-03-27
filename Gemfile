@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-ruby '2.4.0'
 gem 'twitter'
 gem 'figaro'
 gem 'haversine'
