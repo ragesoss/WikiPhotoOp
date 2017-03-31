@@ -27,6 +27,7 @@ class TwitterAccount
     tweets.each do |tweet|
       next if Mention.exists?(status_id: tweet.id)
       coordinates = tweet&.geo&.coordinates
+      coordinates = nil if coordinates.class == Twitter::NullObject
       coordinates ||= place_coordinates(tweet)
       next unless coordinates
       pp coordinates
@@ -43,6 +44,7 @@ class TwitterAccount
   def place_coordinates(tweet)
     coordinates_set = tweet&.place&.bounding_box&.coordinates
     return unless coordinates_set
+    return if coordinates_set.class == Twitter::NullObject
     latitudes = []
     longitudes = []
     pp coordinates_set[0]
