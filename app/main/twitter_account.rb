@@ -44,8 +44,9 @@ class TwitterAccount
     latitudes = []
     longitudes = []
     coordinates_set[0].each do |coordinates|
-      latitudes << coordinates[0]
-      longitudes << coordinates[1]
+      # For some reason, Twitter sometimes does lat/lon, other times lon/lat
+      longitudes << coordinates[0]
+      latitudes << coordinates[1]
     end
     average_lat = latitudes.sum / latitudes.size
     average_long = longitudes.sum / longitudes.size
