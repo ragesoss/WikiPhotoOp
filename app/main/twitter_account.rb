@@ -27,6 +27,7 @@ class TwitterAccount
     tweets.each do |tweet|
       next if Mention.exists?(status_id: tweet.id)
       coordinates = tweet&.geo&.coordinates
+      coordinates ||= place_coordinates(tweet)
       next unless coordinates
       nearest = Unphotographed.near(coordinates)
       opts = reply_tweet_options(tweet, nearest)
@@ -35,6 +36,20 @@ class TwitterAccount
       Rails.logger.info "Tweeted reply to #{tweet.id}!"
       Mention.create(status_id: tweet.id)
     end
+  end
+
+  def place_coordinates(tweet)
+    coordinates_set = tweet&.place&.bounding_box&.coordinates
+    return unless coordinates_set
+    latitudes = []
+    longitudes = []
+    coordinates_set[0].each do |coordinates|
+      latitudes << coordinates[0]
+      longitudes << coordinates[1]
+    end
+    average_lat = latitudes.sum / latitudes.size
+    average_long = longitudes.sum / longitudes.size
+    return [average_lat, average_long]
   end
 
   def reply_tweet_options(tweet, nearest)
