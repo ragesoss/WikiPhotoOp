@@ -29,7 +29,9 @@ class TwitterAccount
       coordinates = tweet&.geo&.coordinates
       coordinates ||= place_coordinates(tweet)
       next unless coordinates
+      pp coordinates
       nearest = Unphotographed.near(coordinates)
+      pp nearest
       opts = reply_tweet_options(tweet, nearest)
       text = reply_tweet_text(tweet, nearest)
       update(text, opts)
@@ -43,6 +45,7 @@ class TwitterAccount
     return unless coordinates_set
     latitudes = []
     longitudes = []
+    pp coordinates_set[0]
     coordinates_set[0].each do |coordinates|
       # For some reason, Twitter sometimes does lat/lon, other times lon/lat
       longitudes << coordinates[0]
