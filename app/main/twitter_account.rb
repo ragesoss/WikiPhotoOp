@@ -66,7 +66,11 @@ class TwitterAccount
   end
 
   def reply_tweet_text(tweet, nearest)
-    "@#{tweet.user.screen_name} \"#{nearest['title']}\" #{google_maps_link(nearest)}"
+    "@#{tweet.user.screen_name} \"#{nearest['title']}\" #{wiki_shoot_me_link(nearest)}"
+  end
+
+  def wiki_shoot_me_link(nearest)
+    "https://tools.wmflabs.org/wikishootme/#lat=#{nearest['lat']}&lng=#{nearest['lon']}&zoom=15"
   end
 
   def google_maps_link(nearest)
